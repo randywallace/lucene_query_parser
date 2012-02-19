@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'lucene_query_parser'
+
+#queries = File.open(Dir.)
+queries = File.open(File.dirname(__FILE__) + '/queries')
+
+queries.each_line do |query|
+  query.sub!(/[0-9]{2}\;(Date Received|Likes|IP) [0-9]{2}/,'')
+  #puts LuceneQueryParser.parse query
+  begin
+    res = LuceneQueryParser.parse(query)
+  rescue Parslet::UnconsumedInput => e
+    puts e.to_s.sub(/\n/,'')
+  end
+  unless res.nil?
+    res.each do |x|
+      if x.is_a? Hash
+        puts x[:redirect_domains_reversed].reverse if x.key? :redirect_domains_reversed
+        puts x[:site_domains_reversed].reverse     if x.key? :site_domains_reversed
+      else
+        nil
+      end
+    end
+  end
+end
+

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require "rubygems"
 require "lucene_query_parser"
 require "rainbow"
 
@@ -71,5 +72,6 @@ if location
 
 else
   puts "query ok".color(:green)
+  puts parser
 end
 
